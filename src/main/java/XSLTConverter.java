@@ -18,9 +18,10 @@ public class XSLTConverter implements IConverter {
     public void convert() {
         String fileNameFrom = "1.xml";
         String fileNameTo = "2.xml";
-        InputStream is = TestBean.class.getResourceAsStream("style.xsl"); // Забираем заранее подготовленную таблицу XSLT стилей из корня jar
 
         try {
+            InputStream is = TestBean.class.getResourceAsStream("style.xsl"); // Забираем заранее подготовленную таблицу XSLT стилей из корня jar
+
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(fileNameFrom); // Создаем документ из файла 1.xml

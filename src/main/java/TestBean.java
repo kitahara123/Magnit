@@ -51,14 +51,14 @@ public class TestBean {
     }
 
     private Connection con;
+    private PreparedStatement ps;
 
     public void clearTable() { // Очищаем таблицу перед вставкой
-        Statement stmt;
         String query = "TRUNCATE TABLE TEST";
         try {
             con = DriverManager.getConnection(url, user, password);
-            stmt = con.createStatement();
-            stmt.executeQuery(query);
+            ps = con.prepareStatement(query);
+            ps.executeQuery();
 
         } catch (SQLException e) {
             toLog.error(e.toString());
@@ -72,7 +72,6 @@ public class TestBean {
     }
 
     public void executeInsert() { //  Вставляем строки в БД
-        PreparedStatement ps = null;
         String query = "insert into TEST (FIELD) VALUES (?)";
         try {
             con = DriverManager.getConnection(url, user, password);
@@ -103,13 +102,12 @@ public class TestBean {
 
     public List<Integer> executeSelect() { // Забираем строки из БД
         List<Integer> res = new ArrayList<>();
-        Statement stmt = null;
         String query = "select field from TEST";
         ResultSet rs = null;
         try {
             con = DriverManager.getConnection(url, user, password);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 res.add(rs.getInt(1));
@@ -121,7 +119,7 @@ public class TestBean {
             try {
                 con.close();
                 if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
+                if (ps != null) ps.close();
             } catch (Exception e) {
                 toLog.error(e.toString());
             }
